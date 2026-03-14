@@ -1,7 +1,7 @@
 import { db } from "@/configs/db";
 import { doubtsTable, likesTable, repliesTable, membershipsTable, classroomsTable, usersTable, moderationLogsTable } from "@/configs/schema";
 import { categorizeDoubt } from "@/lib/ai/categorizer";
-import { and, eq, desc, isNull, or, not } from "drizzle-orm";
+import { and, eq, desc, isNull, or, not, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { moderateContent } from "@/lib/moderation";
@@ -74,6 +74,10 @@ export async function GET(req: Request) {
 
         if (type && type !== "All") {
             conditions.push(eq(doubtsTable.type, type));
+            // Security/Privacy: AI history is personal
+            if (type === 'ai' && email) {
+                conditions.push(eq(doubtsTable.userEmail, email));
+            }
         }
 
         let doubts = await query.where(and(...conditions)).orderBy(desc(doubtsTable.createdAt));

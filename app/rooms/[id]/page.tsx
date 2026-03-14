@@ -230,7 +230,7 @@ export default function ClassroomPage() {
                         <div className="space-y-8">
                             <h2 className="text-2xl font-black uppercase italic tracking-tight text-center">ASK <span className="text-blue-500">AI Teacher</span></h2>
                             <div className="max-w-3xl mx-auto">
-                                <AskAIView classroomId={Number(id)} />
+                                <AskAIView classroomId={Number(id)} onSuccess={() => fetchScopedDoubts('ai')} />
                             </div>
                         </div>
 
@@ -662,7 +662,7 @@ function ClassroomInsightsView({ classroomId, role }: { classroomId: number, rol
                         <span className="text-[9px] font-black uppercase text-slate-500 tracking-widest">Student Activity Hours</span>
                     </div>
                 </div>
-                <div className="grid grid-cols-24 gap-1 h-32 items-end">
+                <div className="grid grid-cols-24 gap-1 h-32 items-end pt-4">
                     {Array.from({ length: 24 }).map((_, hour) => {
                         const activity = data?.peakTime.find((p: any) => p.hour === hour)?.count || 0;
                         const heightPercentage = Math.min((activity / 10) * 100, 100);
@@ -687,7 +687,7 @@ function ClassroomInsightsView({ classroomId, role }: { classroomId: number, rol
 
             {/* 5. AI Teaching Suggestions */}
             <div className="space-y-8">
-                <h3 className="text-xl font-black uppercase italic tracking-tight flex items-center gap-3 px-2">
+                <h3 className="text-xl font-black uppercase italic tracking-tight flex items-center gap-3 px-2 mt-12 pb-4">
                     <Zap className="w-5 h-5 text-yellow-400" /> AI Pedagogical Insights
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

@@ -48,7 +48,7 @@ const EXAMPLE_PROMPTS = [
     "What is Ohm's Law? Give an example.",
 ];
 
-export default function AskAIView({ classroomId = null }: { classroomId?: number | null }) {
+export default function AskAIView({ classroomId = null, onSuccess }: { classroomId?: number | null, onSuccess?: () => void }) {
     const [inputMode, setInputMode] = useState<'text' | 'image'>('text');
     const [prompt, setPrompt] = useState('');
     const [imageBase64, setImageBase64] = useState<string | null>(null);
@@ -106,6 +106,7 @@ export default function AskAIView({ classroomId = null }: { classroomId?: number
             const data = await res.json();
             if (!res.ok) throw new Error(data?.error || "The AI couldn't process your request.");
             setResponse(data.reply);
+            if (onSuccess) onSuccess();
         } catch (err: any) {
             setErrorMsg(err.message || "Something went wrong. Please try again.");
             toast.error(err.message || "Failed to process AI request.");
