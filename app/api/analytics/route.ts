@@ -53,8 +53,8 @@ export async function GET(req: Request) {
         })
             .from(doubtsTable)
             .where(eq(doubtsTable.classroomId, classroomId))
-            .groupBy(sql`hour`)
-            .orderBy(sql`hour`);
+            .groupBy(sql`extract(hour from ${doubtsTable.createdAt})`)
+            .orderBy(sql`extract(hour from ${doubtsTable.createdAt})`);
 
         // 5. Student Engagement
         const engagement = await db.select({
